@@ -6,7 +6,6 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/sagernet/sing/common/control"
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/transport/internet"
 )
@@ -15,9 +14,8 @@ func TestRegisterListenerController(t *testing.T) {
 	var gotFd uintptr
 
 	common.Must(internet.RegisterListenerController(func(network, address string, conn syscall.RawConn) error {
-		return control.Raw(conn, func(fd uintptr) error {
+		return conn.Control(func(fd uintptr) {
 			gotFd = fd
-			return nil
 		})
 	}))
 
